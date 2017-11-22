@@ -11,7 +11,14 @@ long_mode_start:
     mov fs, ax
     mov gs, ax
 
+    ; call the rust main
+    extern rust_main
+    call rust_main
+
     ; print 'OKAY' to screen
-    mov rax, 0x2f592f412f4b2f4f
+    ; mov rax, 0x2f592f412f4b2f4f
+    ; print 'HERE' to screen
+     mov rax, 0x2f452f522f452f48
+
     mov qword [0xb8000], rax
     hlt
