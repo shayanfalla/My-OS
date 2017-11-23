@@ -15,11 +15,23 @@ mod vga_buffer;
 pub extern fn rust_main() {
 	
 	vga_buffer::clear_screen();
-	println!("Hello World{}", "!");
-	println!("{}", { println!("inner"); "outer"});
-	
+	//println!("Hello World{}", "!");
+	//println!("{}", { println!("inner"); "outer"});
+	let x = better(12);
+	println!("The number is : {}",x);
+	//better(x);
 
 	loop{}
+}
+
+fn better(n: u32) -> (u32, u32){
+	if n == 1{
+	(1,0)
+} else {
+	println!("better({})", n-1);
+	let (f1, f2) = better(n-1);
+	(f1+f2,f1)
+	}
 }
 
 #[lang = "eh_personality"] extern fn eh_personality() {}
