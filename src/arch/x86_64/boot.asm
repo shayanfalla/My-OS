@@ -5,6 +5,7 @@ section .text
 bits 32
 start:
     mov esp, stack_top
+    mov edi, ebx ; Move Multiboot info pointer to edi
 
     ; start multiboot
     call check_multiboot
@@ -155,7 +156,7 @@ p3_table:
 p2_table:
     resb 4096
 stack_bottom:
-    resb 512
+    resb 4096 * 4
 stack_top:
 
 section .rodata
