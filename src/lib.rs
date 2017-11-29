@@ -4,10 +4,14 @@
 #![feature(const_unique_new)]
 #![feature(unique)]
 #![no_std]
+
 extern crate rlibc;
 extern crate volatile;
 extern crate spin;
 extern crate multiboot2;
+#[macro_use]
+extern crate bitflags;
+extern crate x86_64;
 
 #[macro_use]
 mod vga_buffer;
