@@ -5,22 +5,18 @@ section .text
 bits 32
 start:
     mov esp, stack_top
-    mov edi, ebx ; Move Multiboot info pointer to edi
+    mov edi, ebx       ; move Multiboot info pointer to edi
 
-    ; start multiboot
     call check_multiboot
     call check_cpuid
     call check_long_mode
 
-    ; start paging
     call set_up_page_tables
     call enable_paging
 
-
-    ; start Global Descriptor Table (GDT)
+    ; load the 64-bit GDT
     lgdt [gdt64.pointer]
 
-    ; start long mode
     jmp gdt64.code:long_mode_start
 
     ; print `OK` to screen
@@ -39,14 +35,14 @@ check_cpuid:
     ; Check if CPUID is supported by attempting to flip the ID bit (bit 21)
     ; in the FLAGS register. If we can flip it, CPUID is available.
 
-    ; Copy FLAGS in to EAX (General purpose register) via stack
+    ; Copy FLAGS in to EAX via stack
     pushfd
     pop eax
 
     ; Copy to ECX as well for comparing later on
     mov ecx, eax
 
-    ; Flip the ID bit (for checking)
+    ; Flip the ID bit
     xor eax, 1 << 21
 
     ; Copy EAX to FLAGS via the stack
@@ -89,7 +85,7 @@ check_long_mode:
     jmp error
 
 set_up_page_tables:
-    ; map p4 table recursively
+    ; map P4 table recursively
     mov eax, p4_table
     or eax, 0b11 ; present + writable
     mov [p4_table + 511 * 8], eax
@@ -143,8 +139,8 @@ enable_paging:
 
     ret
 
-; Prints 'ERR: ' and the given error, then hangs.
-; parameter: error code (in ASCII) in al
+; Prints `ERR: ` and the given error code to screen and hangs.
+; parameter: error code (in ascii) in al
 error:
     mov dword [0xb8000], 0x4f524f45
     mov dword [0xb8004], 0x4f3a4f52
