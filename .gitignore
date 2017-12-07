@@ -3,3 +3,5 @@ build/
 os.iso
 target/
 Cargo.lock
+asm-intel.lang
+README.md
